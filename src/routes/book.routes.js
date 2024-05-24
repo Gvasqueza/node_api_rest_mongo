@@ -54,10 +54,10 @@ router.get('/', async (req, res) => {
 
 //crear un nuevo libro (recurso) [POST]
 router.post('/', async (req, res) => {
-    const {title, autor, genre, publication_date} = req?.body
-    if(!title || !autor || !genre || !publication_date){
+    const {title, autor, tipo, imagen, genre} = req?.body
+    if(!title || !autor || !tipo || !imagen || !genre){
         return res.status(400).json({
-            message: 'Los campos título, autor, género y fechas son obligatorios'
+            message: 'Los campos título, autor, tipo, imagen y género son obligatorios'
         })
     }
 
@@ -65,8 +65,9 @@ router.post('/', async (req, res) => {
         {
             title,
             autor, 
-            genre, 
-            publication_date
+            tipo, 
+            imagen,
+            genre
         }
     )
 
@@ -92,8 +93,9 @@ router.put('/:id', getBook, async(req,res)=>{
         const book = res.book
         book.title = req.body.title || book.title;
         book.autor = req.body.autor || book.autor;
+        book.tipo = req.body.tipo || book.tipo;
+        book.imagen = req.body.imagen || book.imagen;
         book.genre = req.body.genre || book.genre;
-        book.publication_date = req.body.publication_date || book.publication_date;
 
         const updatedBook = await book.save()
         res.json(updatedBook)
@@ -108,9 +110,9 @@ router.put('/:id', getBook, async(req,res)=>{
 
 router.patch('/:id', getBook, async(req,res)=>{
 
-    if(!req.body.title && !req.body.autor && !req.body.genre && !req.body.publication_date){
+    if(!req.body.title && !req.body.autor && !req.body.tipo && !req.body.imagen & !req.body.genre ){
         res.status(400).json({
-            message: 'Al menos uno de este campo debe ser enviado: Titulo, Autor, Genero o Fecha de publicación'
+            message: 'Al menos uno de este campo debe ser enviado: Titulo, Autor, Tipo, imagen o Genero'
         })
     }
 
@@ -118,8 +120,9 @@ router.patch('/:id', getBook, async(req,res)=>{
         const book = res.book
         book.title = req.body.title || book.title;
         book.autor = req.body.autor || book.autor;
-        book.genre = req.body.genre || book.genre;
-        book.publication_date = req.body.publication_date || book.publication_date;
+        book.tipo = req.body.tipo || book.tipo;
+        book.imagen = req.body.imagen || book.imagen;
+        book.genre =  req.body.genre || book.genre;
 
         const updatedBook = await book.save()
         res.json(updatedBook)
